@@ -1,0 +1,80 @@
+import random
+
+# import re 
+
+
+MAX_ERRORS = 8
+words_list = ('автострада', 'бензин', 'инопланетянин', 'самолет',
+              'библиотека', 'шайба', 'олимпиада')
+
+
+def print_list(arg):
+    print(''.join(arg))
+
+
+errors_counter = 0
+while True:  # Решил пойти через двойной цикл. Пока что работает :D
+    secret_word = random.choice(words_list)
+    print(secret_word)  # будет нужно - спрячем-с.
+    go_to_exit = False  # флаг
+    users_word = ['*'] * len(secret_word)
+    print_list(users_word)
+
+    errors_counter = 0
+    while True:
+        letter = input('введите букву: ').lower()        # if not letter != re.compile('^[а-я],{1}$'): пока что не понял, что тут не так, но разберусь точно.
+
+        if len(letter) != 1 or not chr(1071) < letter or not letter < chr(1104):
+            continue
+
+        if letter in secret_word:
+            idx = 0
+            for _char in secret_word:
+                if _char == letter:
+                    users_word[idx] = letter
+                idx += 1
+            if '*' not in users_word:
+                print('вы выиграли!!!')
+                print('Количество ошибок = ', errors_counter)
+                print_list(users_word)
+
+                while True:
+                    question = input(
+                        'Не хотите попробовать еще раз? Y/N').lower()  # Вынести как функцию - не сумел. Мешает break :)
+
+                    # if not question == chr(120)or not question == chr(121):
+                    #     continue  тоже не совсем понял, почему не работает, разбираюсь :)
+
+                    if question == 'y':
+                        break
+                    elif question == 'n':
+                        go_to_exit = True
+                        break
+                    else:
+                        print('Неизвестное выражение')
+                        continue
+                break
+        else:
+            errors_counter += 1
+            print('ошибок: ', errors_counter)
+            if errors_counter == MAX_ERRORS:
+                print('вы проиграли :(')
+
+                while True:
+                    question = input('Не хотите попробовать еще раз? Y/N').lower()
+                    if question == 'y':
+                        break
+                    elif question == 'n':
+                        go_to_exit = True
+                        break
+                    else:
+                        print('Неизвестное выражение')
+                        continue
+                break
+
+        print_list(users_word)
+    if go_to_exit:  # Ну и, собственно, конструкция экстренного убегания.
+        break
+print('До встречи!')
+# Кажется мне, что это безумно велосипедо-костыльно. Немного застрял на попытках выводить результаты ответов,
+# заменяя предшествующий текст - все поломал. Разбираюсь и с этим.
